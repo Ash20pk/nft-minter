@@ -28,4 +28,14 @@ module.exports = {
   },  etherscan: {
     apiKey: process.env.API_KEY, 
   },
+  customChains: [
+    {
+      network: "core_testnet",
+      chainId: 1115,
+      urls: {
+        apiURL: "https://api.test.btcs.network/api",
+        browserURL: "https://scan.test.btcs.network/"
+      }
+    },
+  ]
 };
