@@ -17,7 +17,7 @@ function Mint() {
   const {address} = useParams();
   const [nftInfo, setNftInfo] = useState(null);
   const toast = useToast();
-  const {account, signer} = useWallet();
+  const {account, signer, provider} = useWallet();
   const [minted, setMinted] = useState(false);
 
 
@@ -54,8 +54,12 @@ function Mint() {
 
     try {
       setMinted(false);
-      const contract = new ethers.Contract(address, ABI.abi, signer);
-      const tx = await contract.safeMint(account, {gasLimit: 100000});
+   
+      const contract = new ethers.Contract(address, ABI.abi, signer);   
+      console.log(contract);
+
+      console.log(account);
+      const tx = await contract.safeMint(account);
       tx.wait();
       toast({
         title: 'Success',
