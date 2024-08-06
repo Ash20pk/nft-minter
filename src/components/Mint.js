@@ -19,6 +19,7 @@ function Mint() {
   const toast = useToast();
   const {account, signer, provider} = useWallet();
   const [minted, setMinted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
@@ -38,7 +39,7 @@ function Mint() {
     };
 
     fetchNftInfo();
-  }, [address, minted]);
+  }, [address, minted, toast]);
 
   const handleMint = async () => {
     if (!account) {
@@ -54,13 +55,14 @@ function Mint() {
 
     try {
       setMinted(false);
+      setLoading(true);
    
       const contract = new ethers.Contract(address, ABI.abi, signer);   
       console.log(contract);
 
       console.log(account);
       const tx = await contract.safeMint(account);
-      tx.wait();
+      await tx.wait();
       toast({
         title: 'Success',
         description: 'NFT minted successfully!',
@@ -79,6 +81,7 @@ function Mint() {
       });
     } finally {
         setMinted(true);
+        setLoading(false);
     }
   };
 
@@ -109,6 +112,8 @@ function Mint() {
         size="lg"
         onClick={handleMint}
         width="100%"
+        loadingText="Minting..."
+        isLoading={loading}
       >
         Mint NFT
       </Button>
